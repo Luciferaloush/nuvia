@@ -1,0 +1,23 @@
+{
+ "appName": "My App",
+ "welcome": "Welcome",
+ "login": "Login",
+ "signup": "Sign Up",
+ "female": "Female",
+ "gender": "Gender",
+ "male": "Male",
+ "first_name": "First Name",
+ "lastname": "Last Name",
+ "next": "Next",
+ "email": "Email",
+ "pass": "Password",
+ "select_photo": "Select your photo",
+ "have_account": "Have account",
+ "dont_have_account": "Don't have account",
+ "interested": "interested",
+ "edit_profile": "Edit Profile",
+ "my_post": "My Post",
+ "replies": "Replies",
+ "my_share": "My Share",
+ "error_loading_please_try_again": "Failed loading please try again"
+}

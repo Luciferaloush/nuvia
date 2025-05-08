@@ -1,0 +1,57 @@
+name: nuvia
+description: A new Flutter project
+# Flutter version on machine: 3.16.9
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc:
+  dio:
+  shared_preferences:
+  easy_localization:
+  intl:
+  equatable:
+  get_it:
+  cached_network_image: ^3.3.1
+  flutter_screenutil:
+  flutter_animate:
+  freezed_annotation:
+  json_annotation:
+  flutter_native_splash:
+  animate_do:
+  lottie:
+  flutter_launcher_icons:
+  animator:
+  dartz:
+  flutter_svg:
+  cupertino_icons: ^1.0.8
+ # google_fonts: ^6.2.0
+  http:
+  eventsource: ^0.4.0
+  cloudinary_public:
+  image_picker: ^1.0.8
+  file_picker: ^8.0.0+1
+  fluttertoast: ^8.2.5
+  carousel_slider: ^5.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner:
+  freezed:
+  json_serializable:
+  bloc_test:
+  mockito:
+  flutter_lints:
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/lottie/
+    - assets/lang/

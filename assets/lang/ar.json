@@ -1,0 +1,23 @@
+{
+ "appName": "تطبيقي",
+ "welcome": "مرحبًا",
+ "login": "تسجيل الدخول",
+ "signup": "إنشاء حساب",
+ "female": "مؤنث",
+ "gender": "حدد نوعك",
+ "male" : "ذكر",
+ "first_name": "الاسم الاول",
+ "lastname": "الاسم الاخير",
+ "next": "التالي",
+ "email": "البريد الإلكتروني",
+ "pass": "كلمة السر",
+ "select_photo": "ححد صورتك",
+ "have_account": "هل تملك حساب",
+ "dont_have_account": "لا تملك حساباً",
+ "interested": "أهتماماتي",
+ "edit_profile": "تعديل البروفايل",
+ "my_post": "منشوراتي",
+ "replies": "ردودي",
+ "my_share": "مشاركاتي",
+ "error_loading_please_try_again": "فشل التحميل الرجاء اعادة المحاولة"
+}
