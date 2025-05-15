@@ -3,23 +3,23 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nuvia/core/extensions/navigation_extensions.dart';
 import 'package:nuvia/core/extensions/theme_extensions.dart';
 
 import '../../core/extensions/sizedbox_extensions.dart';
 
-class Profile extends StatelessWidget {
+class UserProfile extends StatelessWidget {
   final String image;
   final String firstname;
   final String lastname;
+  final String follow;
+  final String following;
+  final String followers;
   final String gender;
   final IconData icon;
   final List<String>? itemCount;
   final String? item;
-  final String followers;
-  final String following;
 
-  const Profile(
+  const UserProfile(
       {super.key,
       required this.image,
       required this.firstname,
@@ -28,15 +28,14 @@ class Profile extends StatelessWidget {
       required this.icon,
       required this.itemCount,
       required this.item,
-      required this.followers,
-      required this.following});
+      required this.follow,
+      required this.following,
+      required this.followers});
 
   @override
   Widget build(BuildContext context) {
     //final iconTheme = context.iconTheme;
     final textTheme = context.textTheme;
-print("following.length ${following.length}");
-    print("followers.length ${followers.length}");
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -79,7 +78,7 @@ print("following.length ${following.length}");
                             Border.all(color: Theme.of(context).dividerColor)),
                     child: Center(
                         child: Text(
-                      "edit_profile".tr(),
+                      follow,
                       style: textTheme.bodySmall,
                     ))),
               ),
@@ -87,7 +86,7 @@ print("following.length ${following.length}");
           ),
           verticalSpace(10),
           Text(
-            "$firstname\t $lastname  ",
+            "$firstname\t $lastname",
             style: textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
           ),
           verticalSpace(10),
@@ -112,25 +111,15 @@ print("following.length ${following.length}");
           verticalSpace(5),
           Row(
             children: [
-              InkWell(
-                onTap: () {
-                  context.pushNamed("/followersScreen");
-                },
-                child: Text("Followers ${followers.length}",
-                    style: TextStyle(
-                        fontSize: 13.sp, fontWeight: FontWeight.bold)),
-              ),
+              Text("Following $following",
+                  style:
+                      TextStyle(fontSize: 13.sp, fontWeight: FontWeight.bold)),
               horizontalSpace(20),
-              InkWell(
-                onTap: () {
-                  context.pushNamed('/followingScreen');
-                },
-                child: Text("Following ${following.length}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13.sp,
-                    )),
-              ),
+              Text("Followers $followers",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13.sp,
+                  )),
               const Spacer(),
             ],
           ),
@@ -162,7 +151,7 @@ print("following.length ${following.length}");
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );

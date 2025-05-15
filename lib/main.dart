@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nuvia/features/auth/profile/cubit/profile_cubit.dart';
 import 'core/constants/app_constants.dart';
 import 'core/cubit/locale/locale_cubit.dart';
 import 'core/cubit/theme/theme_cubit.dart';
@@ -12,13 +13,13 @@ import 'core/utils/app_shared_preferences.dart';
 import 'core/routing/app_router.dart';
 import 'app.dart';
 import 'app_bloc_observer.dart';
-
+import 'features/post/cubit/post_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   Bloc.observer = AppBlocObserver();
-   DioHelper.init();
+  DioHelper.init();
   await CacheHelper.init();
 
   runApp(EasyLocalization(
@@ -29,6 +30,10 @@ Future<void> main() async {
       providers: [
         BlocProvider(create: (_) => LocaleCubit()),
         BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(
+            create: (context) => ProfileCubit()
+              ..profile(context)
+              ..myPosts(context)),
       ],
       child: Builder(
         builder: (context) {
@@ -39,7 +44,7 @@ Future<void> main() async {
           return BlocBuilder<ThemeCubit, ThemeState>(
             builder: (context, state) {
               return MaterialApp(
-                debugShowCheckedModeBanner: true,
+                debugShowCheckedModeBanner: false,
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
                 themeMode: state.themeMode,
@@ -49,7 +54,8 @@ Future<void> main() async {
                 home: MyApp(appRouter: AppRouter()),
               );
             },
-          );        },
+          );
+        },
       ),
     ),
   ));

@@ -12,6 +12,7 @@ class EndpointConstants {
   static const String add = "${post}add?language=";
   static const String myPosts = "${post}my-posts?language=";
   static const String allPosts = "${post}all-posts?language=";
+  static const String forYouPosts = "${post}foryou?language=";
   static const String interaction = "${post}interaction/";
   static const String addLike = "${interaction}like?language=";
   static const String allLike = interaction;
@@ -21,5 +22,8 @@ class EndpointConstants {
   static const String getUsers = "${users}users";
   static const String follow = "${users}follow/";
   static const String unfollow = "${users}unfollow/";
+  static const String userProfile = "${users}profile/";
+  static const String following = "${users}following?language=";
+  static const String followers = "${users}followers?language=";
 
 }

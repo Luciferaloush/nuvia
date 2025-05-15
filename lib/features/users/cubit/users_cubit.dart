@@ -19,6 +19,10 @@ class UsersCubit extends Cubit<UsersState> {
   final String token = AppConstants.token;
 
   final List<User> users = [];
+  final List<User> userFollowing = [];
+  final List<User> userFollowers = [];
+
+  User? user;
   final TextEditingController controller = TextEditingController();
   List<bool> userFollow = [false];
 
@@ -36,7 +40,7 @@ class UsersCubit extends Cubit<UsersState> {
         print(value.statusCode);
         print(value.data);
       }
-      final user = value.data['user'] as List<dynamic>;
+      final user = value.data['users'] as List<dynamic>;
       if (value.statusCode == StatusCode.notFound) {
         emit(UsersError(error: value.data["message"]));
       }
@@ -58,6 +62,63 @@ class UsersCubit extends Cubit<UsersState> {
       }
       emit(UsersError(error: error.toString()));
     });
+  }
+
+  usersProfile(BuildContext context, {required String userId}) async {
+    final localeCubit = BlocProvider.of<LocaleCubit>(context);
+    final languageCode = localeCubit.state.locale.languageCode;
+    emit(UserProfileLoading());
+
+    DioHelper.getData(
+        url: "${EndpointConstants.userProfile}$userId?language=$languageCode",
+        query: {},
+        headers: {
+          "token": token,
+        }).then((value) {
+      if (value == null) {
+        emit(UserProfileError(error: "value is null"));
+        return;
+      }
+      if (kDebugMode) {
+        print(value.statusCode);
+        print(value.data);
+      }
+      final users = value.data;
+      if (value.statusCode == StatusCode.notFound) {
+        emit(UserProfileError(error: value.data["message"]));
+      }
+      if (value.statusCode == StatusCode.ok) {
+        user = User.fromJson(users);
+        emit(UserProfileLoaded());
+      }
+    }).catchError((error, stacktrace) {
+      if (kDebugMode) {
+        print("error: $error\nstacktrace: $stacktrace,\n");
+      }
+      emit(UserProfileError(error: error.toString()));
+    }).catchError((error, stacktrace) {
+      if (kDebugMode) {
+        print("Error occurred: ${error.toString()}");
+        print("Stacktrace: $stacktrace");
+      }
+      emit(UserProfileError(error: error.toString()));
+    });
+  }
+
+  late String status;
+
+  followingStatus() {
+    if (user != null) {
+      if (user!.followingStatus == 1 || user!.followingStatus == 2) {
+        status = "Following";
+      } else if (user!.followingStatus == 0) {
+        status = "Follow back";
+      } else if (user!.followingStatus == 3) {
+        status = "Follow";
+      }
+    } else {
+      status = "Unknown";
+    }
   }
 
   Future<void> follow(BuildContext context,
@@ -165,4 +226,5 @@ class UsersCubit extends Cubit<UsersState> {
       emit(UnFollowError(error: error.toString()));
     });
   }
+
 }

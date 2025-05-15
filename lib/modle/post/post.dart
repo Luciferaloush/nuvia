@@ -16,8 +16,8 @@ class Posts {
   List<String>? likes;
   List<String>? sharedPosts;
   bool? likeStatus;
-
-
+  bool? likePost;
+  bool? isLiked;
   Posts(
       {this.topics,
         this.hashtage,
@@ -29,27 +29,31 @@ class Posts {
         this.iV,
         this.comments,
         this.likes,
-        this.sharedPosts});
+        this.sharedPosts,
+      this.likePost,
+        this.isLiked = false
+      });
 
-  Posts.fromJson(Map<String, dynamic> json) {
+  Posts.fromJson(Map<String, dynamic> json, String userId) {
     print("Json: $json");
-    topics = json['topics'] != null ? Topics.fromJson(json['topics']) : null;
+    topics = json['topics'] != null && json['topics'] is Map ? Topics.fromJson(json['topics']) : null;
     hashtage = json['hashtage']?.map<String>((v) => v.toString()).toList() ?? [];
     sId = json['_id'];
     content = json['content'];
+    likePost= json['likes'].contains(userId);
+
     image = json['image']?.cast<String>() ?? [];
-    creator = json['creator'] != null ? User.fromJson(json['creator']) : null;
+    creator = json['creator'] != null && json['creator'] is Map ? User.fromJson(json['creator']) : null;
     createdAt = json['createdAt'];
     iV = json['__v'];
     comments = json['comments'] != null
         ? (json['comments'] as List).map((v) => Comments.fromJson(v)).toList()
         : [];
+    isLiked= json['likes'] != null && json['likes'].contains(userId);
     likes = json['likes']?.cast<String>() ?? [];
     sharedPosts = json['sharedPosts']?.cast<String>() ?? [];
     likeStatus = json['likeStatus'];
-
-  }
-  Map<String, dynamic> toJson() {
+  }  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (topics != null) {
       data['topics'] = topics!.toJson();

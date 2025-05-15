@@ -19,4 +19,20 @@ class ProfileError extends ProfileState {
   ProfileError({required this.error});
 }
 
+class MyPostsLoading extends ProfileState {}
+
+class MyPostsLoaded extends ProfileState {
+  final List<Posts> post;
+  MyPostsLoaded({required this.post});
+}
+
+class MyPostsError extends ProfileState {
+  final String error;
+
+  MyPostsError({required this.error});
+}
+
+
 class NoInternet extends ProfileState {}
+
+

@@ -1,4 +1,3 @@
-import 'package:eventsource/eventsource.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,6 @@ import '../../../core/helper/dio_helper.dart';
 import '../../../core/network/status_code.dart';
 import '../../../modle/post/like.dart';
 import '../../../modle/post/post.dart';
-import 'dart:convert';
 
 import '../../../modle/post/share.dart';
 
@@ -23,62 +21,151 @@ class PostCubit extends Cubit<PostState> {
 
   static PostCubit get(context) => BlocProvider.of(context);
   final List<Posts> posts = [];
+  final List<Posts> userPosts = [];
+  final List<Posts> recommendedPosts = [];
+  final List<Posts> excellentPosts = [];
+  final List<Posts> topPosts = [];
+  final List<Posts> tPPosts = [];
   bool shareStatus = false;
   bool commentStatus = false;
-  final TextEditingController comment = TextEditingController();
+  final String userId = AppConstants.userId;
+  final TextEditingController commentC = TextEditingController();
   final List<SharedPosts> sharedPosts = [];
-   Like? likes;
+  Like? likes;
+  List<bool> userLike = [false];
+  postForYou(BuildContext context) async {
+    final localeCubit = BlocProvider.of<LocaleCubit>(context);
+    final languageCode = localeCubit.state.locale.languageCode;
+    emit(PostForYouLoading());
+    DioHelper.getData(
+        url: "${EndpointConstants.forYouPosts}$languageCode",
+        query: {},
+        headers: {"token": AppConstants.token}).then((value) {
+      if (value == null) {
+        emit(PostForYouError(error: "value is null"));
+        return;
+      }
+      if (kDebugMode) {
+        print(value.statusCode);
+      }
+      if (value.statusCode != StatusCode.ok) {
+        if (kDebugMode) {
+          print(value.data.runtimeType);
+          print(value.data);
+          print(value.statusCode);
+        }
+        emit(PostForYouError(error: value.data.toString()));
+        return;
+      }
+      if (value.statusCode == StatusCode.ok) {
+        if (value.data["message"] == "TP") {
+          final tPPost = value.data['post'] as List<dynamic>;
+          tPPosts.addAll(tPPost
+              .map((e) => Posts.fromJson(e as Map<String, dynamic>, userId))
+              .toList());
+          emit(TPPostLoaded());
+        } else {
+          final excellentPost = value.data['excellentReco'] as List<dynamic>;
+          final topPost = value.data['topPost'] as List<dynamic>;
+          excellentPosts.addAll(excellentPost
+              .map((e) => Posts.fromJson(e as Map<String, dynamic>, userId))
+              .toList());
+          topPosts.addAll(topPost
+              .map((e) => Posts.fromJson(e as Map<String, dynamic>, userId))
+              .toList());
+          userLike = List<bool>.filled(excellentPosts.length, false);
+          userLike = List<bool>.filled(topPosts.length, false);
+          if (kDebugMode) {
+            print("excellentPost: $excellentPost");
+            print("topPost: $topPost");
+          }
+          emit(PostForYouLoaded());
+        }
+      }
+    }).catchError((error, stacktrace) {
+      if (kDebugMode) {
+        print("error: $error\nstacktrace: $stacktrace,\n");
+      }
+      emit(PostForYouError(error: error.toString()));
+    }).catchError((error, stacktrace) {
+      if (kDebugMode) {
+        print("Error occurred: ${error.toString()}");
+        print("Stacktrace: $stacktrace");
+      }
+      emit(PostForYouError(error: error.toString()));
+    });
+  }
 
   allPost(BuildContext context) async {
     final localeCubit = BlocProvider.of<LocaleCubit>(context);
     final languageCode = localeCubit.state.locale.languageCode;
-
     emit(PostLoading());
-    final url =
-        "https://nuvia-server-1.onrender.com${EndpointConstants.allPosts}$languageCode";
-
-    try {
-      final eventSource = await EventSource.connect(url, headers: {
-        "token": AppConstants.token,
-      });
-
-      eventSource.listen((Event event) {
-        if (kDebugMode) {
-          print('Received event: ${event.data}');
-        }
-        final List<dynamic> post = json.decode(event.data.toString());
-        if (kDebugMode) {
-          print(post);
-        }
-        posts.addAll(post
-            .map((e) => Posts.fromJson(e as Map<String, dynamic>))
-            .toList());
-        emit(PostLoaded());
-      }, onError: (error) {
-        if (kDebugMode) {
-          print('Error: $error');
-        }
-        emit(PostError(error: error.toString()));
-      }, onDone: () {
-        if (kDebugMode) {
-          print('Connection closed');
-        }
-      });
-    } catch (error) {
+    DioHelper.getData(
+        url: "${EndpointConstants.allPosts}$languageCode",
+        query: {},
+        headers: {"token": AppConstants.token}).then((value) {
+      if (value == null) {
+        emit(PostError(error: "value is null"));
+        return;
+      }
       if (kDebugMode) {
-        print("Error occurred: $error");
+        print(value.statusCode);
+      }
+      if (value.statusCode != StatusCode.ok) {
+        if (kDebugMode) {
+          print(value.data.runtimeType);
+          print(value.data);
+          print(value.statusCode);
+        }
+        emit(PostError(error: value.data.toString()));
+        return;
+      }
+      if (value.statusCode == StatusCode.ok) {
+        final userPost = value.data['userPosts'] as List<dynamic>;
+        final recommendedPost = value.data['recommendedPosts'] as List<dynamic>;
+        userPosts.addAll(userPost
+            .map((e) =>
+                Posts.fromJson(e as Map<String, dynamic>, AppConstants.userId))
+            .toList());
+        recommendedPosts.addAll(recommendedPost
+            .map((e) =>
+                Posts.fromJson(e as Map<String, dynamic>, AppConstants.userId))
+            .toList());
+        userLike = List<bool>.filled(userPosts.length, false);
+        userLike = List<bool>.filled(recommendedPosts.length, false);
+        if (kDebugMode) {
+          print("userPost: $userPost");
+          print("recommendedPost: $recommendedPost");
+        }
+        emit(PostLoaded());
+      }
+    }).catchError((error, stacktrace) {
+      if (kDebugMode) {
+        print("error: $error\nstacktrace: $stacktrace,\n");
       }
       emit(PostError(error: error.toString()));
-    }
+    }).catchError((error, stacktrace) {
+      if (kDebugMode) {
+        print("Error occurred: ${error.toString()}");
+        print("Stacktrace: $stacktrace");
+      }
+      emit(PostError(error: error.toString()));
+    });
   }
 
-  Future<void> addLike(BuildContext context, {required String postId}) async {
+  Future<void> addLike(BuildContext context,
+      {required String postId, required int index}) async {
     final localeCubit = BlocProvider.of<LocaleCubit>(context);
     final languageCode = localeCubit.state.locale.languageCode;
     final postIndex = posts.indexWhere((post) => post.sId == postId);
     if (postIndex != -1) {
       posts[postIndex].likeStatus = true;
     }
+    while (userLike.length <= index) {
+      userLike.add(false);
+    }
+    userLike[index] = true;
+
     emit(AddLikeLoading());
     DioHelper.postData(
         url: "${EndpointConstants.addLike}$languageCode",
@@ -97,6 +184,13 @@ class PostCubit extends Cubit<PostState> {
           print(value.data);
           print(value.statusCode);
         }
+        userLike[index] = false;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${value.data["message"]}'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
         final postIndex = posts.indexWhere((post) => post.sId == postId);
         if (postIndex != -1) {
           posts[postIndex].likeStatus = false;
@@ -129,7 +223,7 @@ class PostCubit extends Cubit<PostState> {
   }
 
   Future<void> addComments(BuildContext context,
-      {required String postId}) async {
+      {required String postId, required TextEditingController comment}) async {
     final localeCubit = BlocProvider.of<LocaleCubit>(context);
     final languageCode = localeCubit.state.locale.languageCode;
     emit(AddCommentsLoading());

@@ -7,6 +7,7 @@ import '../cubit/post_cubit.dart';
 
 class MySharedPostsScreen extends StatelessWidget {
   final User user;
+
   const MySharedPostsScreen({super.key, required this.user});
 
   @override
@@ -23,15 +24,17 @@ class MySharedPostsScreen extends StatelessWidget {
           itemCount: cubit.sharedPosts.length,
           itemBuilder: (context, index) {
             return MySharedPosts(
+              index: index,
               sharedPosts: cubit.sharedPosts[index],
               // onPressed: () {
               //   cubit.addLike(context,
               //       postId: cubit.posts[index].sId.toString());
               // },
-              comment: cubit.comment,
+              comment: cubit.commentC,
               onPressedSendComments: () {
                 cubit.addComments(context,
-                    postId: cubit.sharedPosts[index].postId.toString());
+                    postId: cubit.sharedPosts[index].postId.toString(),
+                    comment: cubit.commentC);
               },
               // onPressedSharePosts: () {
               //   cubit.sharePost(context,
@@ -44,9 +47,7 @@ class MySharedPostsScreen extends StatelessWidget {
           },
         );
       },
-      listener: (context, state) {
-
-      },
+      listener: (context, state) {},
     );
   }
 }

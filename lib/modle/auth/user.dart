@@ -1,3 +1,6 @@
+import '../../core/constants/app_constants.dart';
+import '../post/post.dart';
+
 class User {
   String? id;
   String? firstname;
@@ -6,6 +9,11 @@ class User {
   int? gender;
   String? image;
   List<String>? selectedTopics;
+  int? followers;
+  int? following;
+  int? followingStatus;
+  List<Posts>? pots;
+  String? followingStatusFo;
 
   User(
       {this.id,
@@ -14,7 +22,8 @@ class User {
       this.email,
       this.gender,
       this.image,
-      this.selectedTopics});
+      this.selectedTopics,
+      this.followingStatusFo});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
@@ -25,7 +34,27 @@ class User {
     image = json['image'];
     selectedTopics = json['selectedTopics'] != null
         ? List<String>.from(json['selectedTopics'])
-        : [];  }
+        : (json['topics'] != null ? List<String>.from(json['topics']) : []);
+
+    followers = json['followers'] is int ? json['followers'] : null;
+    following = json['following'] is int ? json['following'] : null;
+    followingStatus =
+        json['followingStatus'] is int ? json['followingStatus'] : null;
+
+    if (json['pots'] != null) {
+      pots = <Posts>[];
+      for (var v in json['pots']) {
+        if (v is Map<String, dynamic>) {
+          pots!.add(Posts.fromJson(v,
+             AppConstants.userId
+          ));
+        } else {
+          print('Expected Map but got String: $v');
+        }
+      }
+    }
+    followingStatusFo = json['followingStatus'];
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -36,6 +65,13 @@ class User {
     data['gender'] = gender;
     data['image'] = image;
     data['selectedTopics'] = selectedTopics;
+    data['followers'] = followers;
+    data['following'] = following;
+    data['followingStatus'] = followingStatus;
+    if (pots != null) {
+      data['posts'] = pots!.map((v) => v.toJson()).toList();
+    }
+    data['followingStatus'] = followingStatusFo;
     return data;
   }
 }

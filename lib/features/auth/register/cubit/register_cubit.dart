@@ -44,6 +44,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       return null;
     }
   }
+
   void selectImage() async {
     emit(PickImagesLoading());
     var image = await pickImages();
@@ -61,10 +62,12 @@ class RegisterCubit extends Cubit<RegisterState> {
       print("No image selected");
     }
   }
+
   Future<String?> uploadImageToCloudinary(XFile image) async {
     try {
       CloudinaryResponse response = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(image.path, resourceType: CloudinaryResourceType.Image),
+        CloudinaryFile.fromFile(image.path,
+            resourceType: CloudinaryResourceType.Image),
       );
       print("Image uploaded successfully: ${response.secureUrl}");
       return response.secureUrl;
@@ -129,6 +132,7 @@ class RegisterCubit extends Cubit<RegisterState> {
           print(value.data);
         }
         CacheHelper.saveData(key: "token", value: value.data['token']);
+        CacheHelper.saveData(key: "userId", value: value.data['_id']);
         emit(RegisterSuccess());
       }
     }).catchError((error, stacktrace) {

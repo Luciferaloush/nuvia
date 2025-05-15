@@ -19,5 +19,6 @@
  "my_post": "My Post",
  "replies": "Replies",
  "my_share": "My Share",
- "error_loading_please_try_again": "Failed loading please try again"
+ "error_loading_please_try_again": "Failed loading please try again",
+ "posts": "Posts"
 }

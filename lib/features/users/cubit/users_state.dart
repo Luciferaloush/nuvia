@@ -15,6 +15,16 @@ class UsersError extends UsersState {
   UsersError({required this.error});
 }
 
+class UserProfileLoading extends UsersState {}
+
+class UserProfileLoaded extends UsersState {}
+
+class UserProfileError extends UsersState {
+  final String error;
+
+  UserProfileError({required this.error});
+}
+
 class FollowLoading extends UsersState {}
 
 class FollowSuccess extends UsersState {}
@@ -34,3 +44,6 @@ class UnFollowError extends UsersState {
 
   UnFollowError({required this.error});
 }
+
+
+

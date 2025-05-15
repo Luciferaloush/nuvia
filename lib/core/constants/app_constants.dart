@@ -9,5 +9,7 @@ class AppConstants {
  static const String localeKey = 'app_locale';
  static const String themeKey = 'app_theme';
  static  String token = CacheHelper.getData(key: "token");
+ static  String userId = CacheHelper.getData(key: "userId");
+
 
 }

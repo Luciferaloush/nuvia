@@ -15,6 +15,18 @@ class PostError extends PostState {
   PostError({required this.error});
 }
 
+class PostForYouLoading extends PostState {}
+
+class PostForYouLoaded extends PostState {}
+
+class PostForYouError extends PostState {
+  final String error;
+
+  PostForYouError({required this.error});
+}
+
+class TPPostLoaded extends PostState {}
+
 class AddLikeLoading extends PostState {}
 
 class AddLikeSuccess extends PostState {}
@@ -58,4 +70,3 @@ class MySharePostError extends PostState {
 
   MySharePostError({required this.error});
 }
-

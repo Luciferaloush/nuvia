@@ -8,4 +8,7 @@ class Routes {
  static const String profileScreen = "/profileScreen";
  static const topicsSelectionScreen = "/topicsScreen";
  static const settingScreen = "/settingScreen";
+ static const followingScreen = '/followingScreen';
+ static const followersScreen = '/followersScreen';
+
 }

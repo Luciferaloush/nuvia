@@ -4,17 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../core/extensions/sizedbox_extensions.dart';
 import '../core/theme/app_colors.dart';
 import '../features/users/cubit/users_cubit.dart';
+import '../features/users/users_profile.dart';
 
 class CustomUsers extends StatelessWidget {
   final String profile;
-  final void Function()? showProfile;
   final TextEditingController controller;
   final UsersCubit cubit;
 
   const CustomUsers(
       {super.key,
       required this.profile,
-      required this.showProfile,
       required this.controller,
       required this.cubit});
 
@@ -26,19 +25,74 @@ class CustomUsers extends StatelessWidget {
           child: Column(
             children: [
               verticalSpace(40),
+              // Padding(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              //   child: TextField(
+              //     decoration: InputDecoration(
+              //       hintText: 'بحث عن مستخدم...',
+              //       border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(10),
+              //         borderSide:
+              //             BorderSide(color: Theme.of(context).dividerColor),
+              //       ),
+              //       suffixIcon: const Icon(Icons.search),
+              //     ),
+              //   ),
+              // ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'بحث عن مستخدم...',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          BorderSide(color: Theme.of(context).dividerColor),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Followers",
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    suffixIcon: const Icon(Icons.search),
-                  ),
+                    Icon(
+                      Icons.search_outlined,
+                      color: Theme.of(context).iconTheme.color,
+                      size: 20.h,
+                    ),
+                  ],
+                ),
+              ),
+              verticalSpace(10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      height: 30.h,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Theme.of(context).cardColor),
+                      child: Center(
+                        child: Text(
+                          "Your Followers",
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              verticalSpace(10),
+
+              Divider(
+                color: Theme.of(context).dividerColor,
+              ),
+              verticalSpace(10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "People you may know",
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  ],
                 ),
               ),
               ListView.builder(
@@ -50,7 +104,7 @@ class CustomUsers extends StatelessWidget {
                   return Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: ListTile(
                           title: Text("${users.firstname}\t${users.lastname}"),
                           leading: const Icon(Icons.person),
@@ -71,15 +125,20 @@ class CustomUsers extends StatelessWidget {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
+                                  color:
+                                      Theme.of(context).cardColor,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                       color: Theme.of(context).cardColor),
                                 ),
                                 child: Center(
-                                  child: Text(cubit.userFollow[index]
+                                  child:
+                  cubit.userFollow[index]?
+                  Text(
+                                      cubit.userFollow[index]
                                       ? "Following"
-                                      : "Follow"),
+                                      : "Follow",
+                                  ) : Text(cubit.users[index].followingStatusFo.toString())
                                 ),
                               ),
                             ),
@@ -88,10 +147,17 @@ class CustomUsers extends StatelessWidget {
                       ),
                       verticalSpace(20),
                       InkWell(
-                        onTap: showProfile,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UsersProfileScreen(
+                                    userId: users.id.toString()),
+                              ));
+                        },
                         child: Container(
                           height: 30.h,
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: AppColor.blue),

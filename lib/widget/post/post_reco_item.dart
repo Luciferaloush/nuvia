@@ -9,7 +9,7 @@ import '../../features/post/cubit/post_cubit.dart';
 import '../../modle/post/post.dart';
 import '../custom_text_field.dart';
 
-class PostItem extends StatelessWidget {
+class RecommendedPostsItem extends StatelessWidget {
   final Posts post;
   final void Function()? onPressed;
   final void Function()? onPressedSendComments;
@@ -20,8 +20,9 @@ class PostItem extends StatelessWidget {
   final bool statusComment;
   final PostState state;
   final TextEditingController comment;
-final int index;
-  const PostItem(
+  final int index;
+
+  const RecommendedPostsItem(
       {super.key,
       required this.post,
       required this.onPressed,
@@ -31,7 +32,9 @@ final int index;
       required this.statusComment,
       required this.state,
       required this.onTapLikes,
-      required this.onTapComments, required this.cubit, required this.index});
+      required this.onTapComments,
+      required this.cubit,
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -139,15 +142,19 @@ final int index;
                 children: [
                   IconButton(
                       icon: Icon(
-                        post.likePost == true
+                        (post.likePost == true)
                             ? Icons.favorite
                             : Icons.favorite_border,
-                        color: post.likePost == true ? Colors.red : Theme.of(context).iconTheme.color,
+                        color: (post.likePost == true)
+                            ? Colors.red
+                            : Theme.of(context).iconTheme.color,
                       ),
                       onPressed: onPressed),
                   //Text(( post.likeStatus == true || statusLike == true)? post.likes?.length++1.toString() ?? "0" : post.likes?.length.toString() ?? "0"),
                   Text(
-                    post.likes?.length.toString() ?? "0"
+                    (post.likeStatus == true)
+                        ? (post.likes?.length ?? 0 + 1).toString()
+                        : (post.likes?.length ?? 0).toString(),
                   ),
                   horizontalSpace(10),
                   InkWell(

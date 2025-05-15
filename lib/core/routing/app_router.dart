@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../features/app/home_brovider.dart';
 import '../../features/auth/profile/screen.dart';
 import '../../features/auth/register/screen.dart';
+import '../../features/following/screen.dart';
+import '../../features/folowers/screen.dart';
 import '../../features/no_internet/screen.dart';
 import '../../features/settings/screen.dart';
 import '../../features/topic/screen.dart';
@@ -30,6 +32,10 @@ class AppRouter {
         return _createRoute(const AppProvider());
       case Routes.settingScreen:
         return _createRoute(const SettingsScreen());
+      case Routes.followingScreen:
+        return _createRoute( const FollowingScreen());
+      case Routes.followersScreen:
+        return _createRoute( const FollowersScreen());
       default:
         return null;
     }

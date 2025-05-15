@@ -1,44 +1,46 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:nuvia/core/extensions/sizedbox_extensions.dart';
 
 import '../../features/post/cubit/post_cubit.dart';
+import '../../modle/auth/user.dart';
 import '../../modle/post/post.dart';
 import '../custom_text_field.dart';
 
-class PostItem extends StatelessWidget {
+class MyPostItem extends StatelessWidget {
   final Posts post;
+  final User user;
   final void Function()? onPressed;
   final void Function()? onPressedSendComments;
   final void Function()? onPressedSharePosts;
   final void Function()? onTapLikes;
-  final PostCubit cubit;
   final void Function()? onTapComments;
-  final bool statusComment;
-  final PostState state;
+  final int index;
+
   final TextEditingController comment;
-final int index;
-  const PostItem(
+  const MyPostItem(
       {super.key,
       required this.post,
       required this.onPressed,
-      required this.comment,
       required this.onPressedSendComments,
       required this.onPressedSharePosts,
-      required this.statusComment,
-      required this.state,
       required this.onTapLikes,
-      required this.onTapComments, required this.cubit, required this.index});
+      required this.onTapComments,
+      required this.index,
+      required this.user, required this.comment});
 
   @override
   Widget build(BuildContext context) {
     DateTime createdAt = DateTime.parse(post.createdAt.toString());
-    int currentShares = post.sharedPosts?.length ?? 0;
+    final postCubit = BlocProvider.of<PostCubit>(context);
 
-    return Padding(
+    return BlocProvider(
+  create: (context) => PostCubit(),
+  child: Padding(
       padding: EdgeInsets.all(12.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +57,7 @@ final int index;
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${post.creator!.firstname}\t${post.creator!.lastname}",
+                    "${user.firstname}\t${user.lastname}",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16.sp,
@@ -86,7 +88,6 @@ final int index;
                 options: CarouselOptions(
                   height: 400.h,
                   autoPlay: false,
-                  // قم بإيقاف الحركة التلقائية
                   enlargeCenterPage: true,
                   aspectRatio: 16 / 9,
                   viewportFraction: 0.8,
@@ -139,15 +140,22 @@ final int index;
                 children: [
                   IconButton(
                       icon: Icon(
-                        post.likePost == true
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: post.likePost == true ? Colors.red : Theme.of(context).iconTheme.color,
+                          (post.likePost == true)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: (post.likePost == true)
+                              ? Colors.red
+                              : Theme.of(context).iconTheme.color
                       ),
-                      onPressed: onPressed),
+                      onPressed: (){
+                        postCubit.addLike(context, postId: post.sId.toString(), index: index);
+
+                      }),
                   //Text(( post.likeStatus == true || statusLike == true)? post.likes?.length++1.toString() ?? "0" : post.likes?.length.toString() ?? "0"),
                   Text(
-                    post.likes?.length.toString() ?? "0"
+                    (post.likeStatus == true)
+                        ? (post.likes?.length ?? 0 + 1).toString()
+                        : (post.likes?.length ?? 0).toString(),
                   ),
                   horizontalSpace(10),
                   InkWell(
@@ -166,9 +174,7 @@ final int index;
                       onPressed: onPressedSendComments),
                   //post.comments.length
 //                  statusComment == true
-                  Text(statusComment
-                      ? (post.comments!.length + 1).toString()
-                      : (post.comments?.length.toString() ?? "0")),
+                  Text(post.comments?.length.toString() ?? "0"),
                   horizontalSpace(10),
                   InkWell(
                       onTap: onTapComments,
@@ -183,13 +189,12 @@ final int index;
                 children: [
                   IconButton(
                       icon: const Icon(Icons.share),
-                      onPressed: onPressedSharePosts),
+                      onPressed: (){
+                        postCubit.sharePost(context, postId: post.sId.toString());
+
+                      }),
                   //post.shares.length
-                  Text(
-                    (state is SharePostSuccess)
-                        ? (currentShares + 1).toString()
-                        : currentShares.toString(),
-                  ),
+                  Text(post.sharedPosts?.length.toString() ?? "0"),
                 ],
               ),
             ],
@@ -198,7 +203,7 @@ final int index;
             children: [
               Expanded(
                   child: CustomTextField(
-                controller: comment,
+                controller: postCubit.commentC,
                 radius: 15,
                 border: Border.all(color: Theme.of(context).focusColor),
                 hint: "type comments...",
@@ -208,7 +213,9 @@ final int index;
               )),
               horizontalSpace(10),
               GestureDetector(
-                onTap: onPressedSendComments,
+                onTap: (){
+                  postCubit.addComments(context, postId: post.sId.toString(), comment: comment);
+                },
                 child: CircleAvatar(
                     backgroundColor: Theme.of(context).cardColor,
                     child: Icon(
@@ -220,6 +227,7 @@ final int index;
           ),
         ],
       ),
-    );
+    ),
+);
   }
 }

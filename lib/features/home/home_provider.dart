@@ -17,7 +17,12 @@ class HomeProvider extends StatelessWidget {
         create: (context) => HomeCubit(),
       ),
       BlocProvider(
-        create: (context) => PostCubit()..allPost(context),
+        create: (context) {
+          final cubit = PostCubit();
+          cubit.postForYou(context);
+          cubit.allPost(context);
+          return cubit;
+        },
       ),
     ], child: const HomeScreen());
   }
