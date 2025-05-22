@@ -27,9 +27,10 @@ class PostCubit extends Cubit<PostState> {
   final List<Posts> topPosts = [];
   final List<Posts> tPPosts = [];
   bool shareStatus = false;
+  final List<bool> isLike = [false];
   bool commentStatus = false;
   final String userId = AppConstants.userId;
-  final TextEditingController commentC = TextEditingController();
+  final TextEditingController comment = TextEditingController();
   final List<SharedPosts> sharedPosts = [];
   Like? likes;
   List<bool> userLike = [false];
@@ -161,6 +162,7 @@ class PostCubit extends Cubit<PostState> {
     if (postIndex != -1) {
       posts[postIndex].likeStatus = true;
     }
+    isLike[index] = true;
     while (userLike.length <= index) {
       userLike.add(false);
     }
@@ -183,6 +185,7 @@ class PostCubit extends Cubit<PostState> {
           print(value.data.runtimeType);
           print(value.data);
           print(value.statusCode);
+          isLike[index] = false;
         }
         userLike[index] = false;
         ScaffoldMessenger.of(context).showSnackBar(
@@ -223,7 +226,7 @@ class PostCubit extends Cubit<PostState> {
   }
 
   Future<void> addComments(BuildContext context,
-      {required String postId, required TextEditingController comment}) async {
+      {required String postId}) async {
     final localeCubit = BlocProvider.of<LocaleCubit>(context);
     final languageCode = localeCubit.state.locale.languageCode;
     emit(AddCommentsLoading());

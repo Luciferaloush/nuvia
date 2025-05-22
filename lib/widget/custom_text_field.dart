@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../core/theme/app_colors.dart';
 
@@ -90,12 +91,16 @@ class CustomTextField extends StatelessWidget {
                         suffixIcon: suffixIcon,
                         hintText: hint,
                         border: InputBorder.none,
-                        enabledBorder: (border != null)
-                            ? InputBorder.none
-                            : UnderlineInputBorder(
+                        enabledBorder: OutlineInputBorder(
+                            borderSide:
+                            BorderSide(color: Theme.of(context).colorScheme.tertiary), borderRadius: BorderRadius.circular(20.r)),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.r),
                           borderSide: BorderSide(
-                              color: AppColor.blue.withOpacity(.7)),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
+                        filled: false,
                         hintStyle: TextStyle(
                           color: hinColor ?? Colors.black54,
                         ),

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nuvia/core/extensions/navigation_extensions.dart';
 
 import '../../../../core/routing/routes.dart';
+import '../../../../core/theme/app_colors.dart';
 
 
 class OnboardingScreen extends StatefulWidget {
@@ -52,9 +53,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
    
            SizedBox(height: 20.h),
            SizedBox(
-             width: double.infinity,
-             child: ElevatedButton(
-               onPressed: () {
+             child: InkWell(
+               onTap:  () {
                  if (isLastPage) {
                    context.pushNamedAndRemoveUntil(
                      Routes.signupScreen,
@@ -66,8 +66,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                    );
                  }
                },
-               child: Text(isLastPage ? 'Get Started' : 'Next'),
-             ),
+               child: Container(
+                 width: 80.w,
+                 height: 30.h,
+                 decoration: BoxDecoration(
+                   color: AppColor.blue,
+                   borderRadius: BorderRadius.circular(20.r)
+                 ),
+                 child: Center(
+                   child: Text(isLastPage ? 'Get Started' : 'Next', style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                     color: Colors.white
+                   )),
+                 ),
+               ),
+             )
            ),
            SizedBox(height: 40.h),
          ],
@@ -91,7 +103,7 @@ class OnboardPage extends StatelessWidget {
      child: Column(
        mainAxisAlignment: MainAxisAlignment.center,
        children: [
-         Icon(Icons.flutter_dash, size: 120.r),
+         Image.asset("assets/images/415389181_11624552.jpg", width: 300.r, height: 200.r,),
          SizedBox(height: 20.h),
          Text(
            title,

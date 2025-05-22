@@ -42,11 +42,10 @@ class AllPostScreen extends StatelessWidget {
                       cubit.addLike(context,
                         postId: cubit.userPosts[index].sId.toString(), index: index);
                     },
-                    comment: cubit.commentC,
+                    comment: cubit.comment,
                     onPressedSendComments: () {
                       cubit.addComments(context,
                           postId: cubit.userPosts[index].sId.toString(),
-                          comment: cubit.commentC
                       );
                     },
                     onPressedSharePosts: () {
@@ -136,7 +135,9 @@ class AllPostScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(10)
                                     ),
                                     child: Center(
-                                      child: Text("Follow", style: Theme.of(context).textTheme.labelLarge),
+                                      child: Text("Follow", style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                                        color: Colors.white
+                                      )),
                                     ),
                                   ),
                                 ),
@@ -165,11 +166,10 @@ class AllPostScreen extends StatelessWidget {
                       cubit.addLike(context,
                         postId: cubit.recommendedPosts[index].sId.toString(), index: index,);
                     },
-                    comment: cubit.commentC,
+                    comment: cubit.comment,
                     onPressedSendComments: () {
                       cubit.addComments(context,
                           postId: cubit.recommendedPosts[index].sId.toString(),
-                          comment: cubit.commentC
                       );
                     },
                     onPressedSharePosts: () {

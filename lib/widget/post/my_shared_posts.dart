@@ -245,7 +245,7 @@ class MySharedPosts extends StatelessWidget {
             horizontalSpace(10),
             GestureDetector(
               onTap: (){
-                postCubit.addComments(context, postId: sharedPosts.postId.toString(), comment: postCubit.commentC);
+                postCubit.addComments(context, postId: sharedPosts.postId.toString(),);
               },
               child: CircleAvatar(
                   backgroundColor: Theme.of(context).cardColor,

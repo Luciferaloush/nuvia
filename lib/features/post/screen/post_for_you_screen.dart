@@ -17,7 +17,9 @@ class PostForYouScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PostCubit, PostState>(
+    return BlocProvider(
+  create: (context) => PostCubit()..postForYou(context),
+  child: BlocConsumer<PostCubit, PostState>(
       builder: (context, state) {
         final cubit = PostCubit.get(context);
         if (state is PostForYouLoading) {
@@ -43,11 +45,10 @@ class PostForYouScreen extends StatelessWidget {
                         cubit.addLike(context,
                             postId: cubit.excellentPosts[index].sId.toString(), index: index);
                       },
-                      comment: cubit.commentC,
+                      comment: cubit.comment,
                       onPressedSendComments: () {
                         cubit.addComments(context,
                             postId: cubit.excellentPosts[index].sId.toString(),
-                            comment: cubit.commentC
                         );
                       },
                       onPressedSharePosts: () {
@@ -162,11 +163,10 @@ class PostForYouScreen extends StatelessWidget {
                         cubit.addLike(context,
                           postId: cubit.topPosts[index].sId.toString(), index: index,);
                       },
-                      comment: cubit.commentC,
+                      comment: cubit.comment,
                       onPressedSendComments: () {
                         cubit.addComments(context,
                             postId: cubit.topPosts[index].sId.toString(),
-                            comment: cubit.commentC
                         );
                       },
                       onPressedSharePosts: () {
@@ -216,11 +216,10 @@ class PostForYouScreen extends StatelessWidget {
                         cubit.addLike(context,
                             postId: cubit.tPPosts[index].sId.toString(), index: index);
                       },
-                      comment: cubit.commentC,
+                      comment: cubit.comment,
                       onPressedSendComments: () {
                         cubit.addComments(context,
                             postId: cubit.tPPosts[index].sId.toString(),
-                            comment: cubit.commentC
                         );
                       },
                       onPressedSharePosts: () {
@@ -308,7 +307,9 @@ class PostForYouScreen extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(10)
                                       ),
                                       child: Center(
-                                        child: Text("Follow", style: Theme.of(context).textTheme.labelLarge),
+                                        child: Text("Follow", style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                                          color: Colors.white
+                                        )),
                                       ),
                                     ),
                                   ),
@@ -339,6 +340,7 @@ class PostForYouScreen extends StatelessWidget {
           }
         }
       },
-    );
+    ),
+);
   }
 }

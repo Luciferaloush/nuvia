@@ -15,11 +15,11 @@ import '../../../../modle/post/post.dart';
 part 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
-  ProfileCubit() : super(ProfileInitial());
+  ProfileCubit(this.user) : super(ProfileInitial());
 
   static ProfileCubit get(context) => BlocProvider.of(context);
 
-  late User user;
+   User user;
   final userId = CacheHelper.getData(key: "userId");
   final List<Posts> posts = [];
   final TextEditingController comment = TextEditingController();

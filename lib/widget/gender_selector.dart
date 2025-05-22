@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../core/theme/app_colors.dart';
 
@@ -10,7 +11,7 @@ class GenderSelector extends StatefulWidget {
   final Function(GenderType) onChange;
   final String? title ;
   final GenderType? initValue;
-  GenderSelector({required this.onChange, this.title, this.initValue});
+  const GenderSelector({super.key, required this.onChange, this.title, this.initValue});
 
   @override
   State<GenderSelector> createState() => _GenderSelectorState();
@@ -51,7 +52,7 @@ class _GenderSelectorState extends State<GenderSelector> {
             children: [
               Text(
                 widget.title!,
-                style: TextStyle(
+                style: const TextStyle(
                     color: AppColor.blue,
                     fontWeight: FontWeight.bold
                 ),
@@ -59,10 +60,10 @@ class _GenderSelectorState extends State<GenderSelector> {
             ],
           ),
         Container(
-          height: 60,
+          height: 30.h,
           margin:const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            borderRadius:BorderRadius.circular(4),
+            borderRadius:BorderRadius.circular(20.r),
             border:Border.all(color: Colors.grey),
           ),
           child: Row(
@@ -82,7 +83,7 @@ class _GenderSelectorState extends State<GenderSelector> {
                       color: maleColor,
                     ),
                     alignment: Alignment.center,
-                    height: 60,
+                    height: 30.h,
                     child: Text(
                       'male'.tr(),
                       style: TextStyle(
@@ -114,7 +115,7 @@ class _GenderSelectorState extends State<GenderSelector> {
                       color: femaleColor,
                     ),
                     alignment: Alignment.center,
-                    height: 60,
+                    height: 30.h,
                     child: Text(
                       'female'.tr(),
                       style: TextStyle(

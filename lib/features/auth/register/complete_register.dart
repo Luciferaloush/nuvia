@@ -1,13 +1,12 @@
-import 'dart:io';
-
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nuvia/core/extensions/navigation_extensions.dart';
 
 import '../../../core/theme/app_colors.dart';
-import '../../../widget/custom_button.dart';
+import '../../../widget/button.dart';
 import 'cubit/register_cubit.dart';
 
 class CompleteRegisterScreen extends StatelessWidget {
@@ -25,7 +24,9 @@ class CompleteRegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Complete Screen $firstname $lastname $email $password $gender");
+    if (kDebugMode) {
+      print("Complete Screen $firstname $lastname $email $password $gender");
+    }
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -54,7 +55,9 @@ class CompleteRegisterScreen extends StatelessWidget {
 
             if (state is RegisterSuccess) {
               context.pushNamedAndRemoveUntil("/topicsScreen");
-              print("SUCCESS");
+              if (kDebugMode) {
+                print("SUCCESS");
+              }
             }
           },
           builder: (context, state) {
@@ -68,38 +71,42 @@ class CompleteRegisterScreen extends StatelessWidget {
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: LinearProgressIndicator(),
                     ),
-                  if(cubit.imageUrl != null && cubit.imageUrl.isNotEmpty)
+                  if (cubit.imageUrl != null && cubit.imageUrl.isNotEmpty)
                     CircleAvatar(
                       backgroundImage: NetworkImage(cubit.imageUrl.toString()),
-                      radius: 30.h,
+                      radius: 55.r,
                     )
                   else
-                  InkWell(
-                    onTap: () {
-                      cubit.selectImage();
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: AppColor.grayColor,
-                      radius: 30.h,
-                      child: const Center(
-                        child: Icon(Icons.camera_alt_outlined),
+                    InkWell(
+                      onTap: () {
+                        cubit.selectImage();
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: AppColor.blue,
+                        radius: 50.r,
+                        child: const Center(
+                          child: Icon(
+                            Icons.camera_alt_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
                   SizedBox(
                     height: 15.h,
                   ),
-                  Text("select_photo".tr()),
+                  Text("select_photo".tr(),
+                      style: Theme.of(context).textTheme.titleMedium),
                   SizedBox(
                     height: 40.h,
                   ),
-                  CustomButton(
-                    text: "signup".tr(),
-                    onPressed: () {
+                  ButtonAuth(
+                    title: 'signup'.tr(),
+                    onTap: () {
                       cubit.register(context);
-                      print(cubit.imageUrl);
                     },
-                  )
+                    width: 150.w,
+                  ),
                 ],
               ),
             );

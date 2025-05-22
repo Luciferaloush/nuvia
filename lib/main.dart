@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nuvia/features/auth/profile/cubit/profile_cubit.dart';
+import 'package:nuvia/modle/auth/user.dart';
 import 'core/constants/app_constants.dart';
 import 'core/cubit/locale/locale_cubit.dart';
 import 'core/cubit/theme/theme_cubit.dart';
@@ -31,7 +32,9 @@ Future<void> main() async {
         BlocProvider(create: (_) => LocaleCubit()),
         BlocProvider(create: (_) => ThemeCubit()),
         BlocProvider(
-            create: (context) => ProfileCubit()
+            create: (context) => ProfileCubit(
+              User()
+            )
               ..profile(context)
               ..myPosts(context)),
       ],

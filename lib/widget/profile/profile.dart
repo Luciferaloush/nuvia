@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nuvia/core/extensions/navigation_extensions.dart';
 import 'package:nuvia/core/extensions/theme_extensions.dart';
@@ -35,8 +35,10 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     //final iconTheme = context.iconTheme;
     final textTheme = context.textTheme;
-print("following.length ${following.length}");
-    print("followers.length ${followers.length}");
+    if (kDebugMode) {
+      print("following.length ${following.length}");
+      print("followers.length ${followers.length}");
+    }
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -91,10 +93,6 @@ print("following.length ${following.length}");
             style: textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
           ),
           verticalSpace(10),
-          const Text(
-            "مطور Flutter | مهتم بالذكاء الاصطناعي | أعشق البرمجة والتكنولوجيا",
-          ),
-          verticalSpace(16),
           Row(
             children: [
               Icon(

@@ -203,7 +203,7 @@ class MyPostItem extends StatelessWidget {
             children: [
               Expanded(
                   child: CustomTextField(
-                controller: postCubit.commentC,
+                controller: postCubit.comment,
                 radius: 15,
                 border: Border.all(color: Theme.of(context).focusColor),
                 hint: "type comments...",
@@ -214,7 +214,7 @@ class MyPostItem extends StatelessWidget {
               horizontalSpace(10),
               GestureDetector(
                 onTap: (){
-                  postCubit.addComments(context, postId: post.sId.toString(), comment: comment);
+                  postCubit.addComments(context, postId: post.sId.toString());
                 },
                 child: CircleAvatar(
                     backgroundColor: Theme.of(context).cardColor,

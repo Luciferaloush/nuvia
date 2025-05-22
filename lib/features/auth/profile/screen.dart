@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/helper/cache_helper.dart';
+import '../../../modle/auth/user.dart';
 import '../../../widget/profile/my_posts.dart';
 import '../../../widget/profile/profile.dart';
 import '../../post/cubit/post_cubit.dart';
@@ -27,7 +28,9 @@ class ProfileScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) {
-            final cubit = ProfileCubit();
+            final cubit = ProfileCubit(
+                User()
+            );
             cubit.profile(context);
             cubit.myPosts(context);
             return cubit;

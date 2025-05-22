@@ -139,7 +139,7 @@ final int index;
                 children: [
                   IconButton(
                       icon: Icon(
-                        post.likePost == true
+                        (post.likePost == true)
                             ? Icons.favorite
                             : Icons.favorite_border,
                         color: post.likePost == true ? Colors.red : Theme.of(context).iconTheme.color,

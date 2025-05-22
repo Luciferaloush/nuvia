@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nuvia/core/extensions/navigation_extensions.dart';
 
 import '../../../core/theme/app_colors.dart';
-import '../../../widget/custom_button.dart';
+import '../../../widget/button.dart';
 import '../../../widget/custom_text_field.dart';
-import '../../../widget/gender_selector.dart';
 import '../../../widget/global_text.dart';
 import '../register/screen.dart';
 import 'cubit/login_cubit.dart';
@@ -44,93 +44,103 @@ class LoginScreen extends StatelessWidget {
                   }
 
                   if (state is LoginSuccess) {
-                    context.pushNamedAndRemoveUntil("/topicsScreen");
+                    context.pushNamedAndRemoveUntil("/homeScreen");
 
-                    print("SUCCESS");
+                    if (kDebugMode) {
+                      print("SUCCESS");
+                    }
                   }
 
                 }, builder: (context, state) {
               final cubit = LoginCubit.get(context);
-              return Form(
-                  key: cubit.formKeyLogin,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 16.ph,
-                          Text(
-                            "signup".tr(),
-                            style: const TextStyle(
-                              color: AppColor.blue,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+              return Center(
+                child: Form(
+                    key: cubit.formKeyLogin,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // 16.ph,
+                            Image.asset(
+                                "assets/images/11667100_20944986.jpg"),
+                            Text(
+                              "signup".tr(),
+                              style: const TextStyle(
+                                color: AppColor.blue,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
 
-                          CustomTextField(
-                            controller: cubit.email,
-                            textInputType: TextInputType.emailAddress,
-                            hint: 'email'.tr(),
-                            title: "email".tr(),
-                            validator: (val) {
+                            CustomTextField(
+                              controller: cubit.email,
+                              textInputType: TextInputType.emailAddress,
+                              hint: 'email'.tr(),
+                              title: "email".tr(),
+                              validator: (val) {
 
-                            },
-                          ),
-                          CustomTextField(
-                            controller: cubit.password,
-                            textInputType: TextInputType.emailAddress,
-                            hint: 'pass'.tr(),
-                            title: "pass".tr(),
-                            validator: (val) {
+                              },
+                            ),
+                            CustomTextField(
+                              controller: cubit.password,
+                              textInputType: TextInputType.emailAddress,
+                              hint: 'pass'.tr(),
+                              title: "pass".tr(),
+                              validator: (val) {
 
-                            },
-                          ),
-                          //16.ph,
-                          CustomButton(
-                            text: 'login'.tr(),
-                            onPressed: () {
-                              if (cubit.formKeyLogin.currentState!
-                                  .validate()) {
-                                cubit.login(context);
-                              }
-                            },
-                          ),
+                              },
+                            ),
+                            //16.ph,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ButtonAuth(
+                                title: 'login'.tr(),
+                                onTap: () {
+                                  if (cubit.formKeyLogin.currentState!
+                                      .validate()) {
+                                    cubit.login(context);
+                                  }
+                                },
+                                width: double.infinity,
+                              ),
+                            ),
 
-                          Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GlobalText(
-                                  text: 'dont_have_account'.tr(),
-                                  padding: const EdgeInsets.all(0),
-                                  fontSize: 11.sp,
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                            const RegisterScreen()));
-                                  },
-                                  child: Text(
-                                    'signup'.tr(),
-                                    style: TextStyle(
-                                        color: AppColor.orange,
-                                        fontSize: 11.sp,
-                                        fontWeight: FontWeight.bold),
+                            Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GlobalText(
+                                    text: 'dont_have_account'.tr(),
+                                    padding: const EdgeInsets.all(0),
+                                    fontSize: 11.sp,
                                   ),
-                                ),
-                              ],
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                              const RegisterScreen()));
+                                    },
+                                    child: Text(
+                                      'signup'.tr(),
+                                      style: TextStyle(
+                                          color: AppColor.blue,
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
 
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ));
+                    )),
+              );
             })));
   }
 }

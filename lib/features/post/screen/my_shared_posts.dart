@@ -30,11 +30,12 @@ class MySharedPostsScreen extends StatelessWidget {
               //   cubit.addLike(context,
               //       postId: cubit.posts[index].sId.toString());
               // },
-              comment: cubit.commentC,
+              comment: cubit.comment,
               onPressedSendComments: () {
-                cubit.addComments(context,
-                    postId: cubit.sharedPosts[index].postId.toString(),
-                    comment: cubit.commentC);
+                cubit.addComments(
+                  context,
+                  postId: cubit.sharedPosts[index].postId.toString(),
+                );
               },
               // onPressedSharePosts: () {
               //   cubit.sharePost(context,
